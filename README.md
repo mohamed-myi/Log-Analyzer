@@ -1,5 +1,5 @@
 # Log Analyzer
 
-C++ utility for parsing and analyzing log files.
+A C++ utility for parsing and analyzing log files with pattern matching and filtering capabilities.
 
-## Setup
+## Building
