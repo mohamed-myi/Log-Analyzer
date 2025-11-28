@@ -1,4 +1,5 @@
 #include "logParser.h"
+#include "logEntry.h"
 #include <fstream>
 #include <sstream>
 
@@ -13,9 +14,10 @@ std::vector<LogEntry> parseLog(const std::string& filePath) {
     std::string line;
     while (std::getline(file, line)) {
         if (!line.empty()) {
-            LogEntry entry;
-            entry.rawLine = line;
-            entries.push_back(entry);
+            LogEntry entry = parseLogEntry(line);
+            if (isValidEntry(entry)) {
+                entries.push_back(entry);
+            }
         }
     }
 
