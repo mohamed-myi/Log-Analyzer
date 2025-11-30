@@ -51,3 +51,29 @@ bool isValidEntry(const LogEntry& entry) {
            !entry.level.empty() && 
            !entry.source.empty();
 }
+
+
+std::string getFormattedEntry(const LogEntry& entry) {
+    // Returns formatted string: [timestamp] level source - message
+    std::ostringstream formatted;
+    formatted << "[" << entry.timestamp << "] " 
+              << entry.level << " " 
+              << entry.source << " - " 
+              << entry.message;
+    return formatted.str();
+}
+
+
+int getLevelSeverity(const std::string& level) {
+    // Returns numeric severity for log level (higher = more severe)
+    if (level == "DEBUG") {
+        return 1;
+    } else if (level == "INFO") {
+        return 2;
+    } else if (level == "WARNING") {
+        return 3;
+    } else if (level == "ERROR") {
+        return 4;
+    }
+    return 0;
+}

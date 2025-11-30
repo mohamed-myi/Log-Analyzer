@@ -19,4 +19,10 @@ LogEntry parseLogEntry(const std::string& line);
 // Validate log entry has required fields
 bool isValidEntry(const LogEntry& entry);
 
+// Get formatted string representation of log entry
+std::string getFormattedEntry(const LogEntry& entry);
+
+// Get numeric severity level (higher = more severe)
+int getLevelSeverity(const std::string& level);
+
 #endif
