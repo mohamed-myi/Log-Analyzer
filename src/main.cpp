@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include "fileReader.h"
+#include "logParser.h"
+#include "logAnalyzer.h"
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -16,6 +18,14 @@ int main(int argc, char* argv[]) {
     }
 
     std::cout << "Log Analyzer initialized for: " << logFile << std::endl;
+
+    std::vector<LogEntry> entries = parseLog(logFile);
+    std::cout << "Parsed " << entries.size() << " log entries" << std::endl;
+
+    std::string mostFrequent = getMostFrequentSource(entries);
+    if (!mostFrequent.empty()) {
+        std::cout << "Most frequent source: " << mostFrequent << std::endl;
+    }
 
     return 0;
 }

@@ -12,4 +12,7 @@ std::map<std::string, int> getStatsByLevel(const std::vector<LogEntry>& entries)
 // Get count of errors grouped by source component
 std::map<std::string, int> getErrorsBySource(const std::vector<LogEntry>& entries);
 
+// Get source component that generated the most log entries
+std::string getMostFrequentSource(const std::vector<LogEntry>& entries);
+
 #endif

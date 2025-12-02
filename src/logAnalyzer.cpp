@@ -26,3 +26,26 @@ std::map<std::string, int> getErrorsBySource(const std::vector<LogEntry>& entrie
 
     return errorCounts;
 }
+
+
+std::string getMostFrequentSource(const std::vector<LogEntry>& entries) {
+    // Returns source component that generated the most log entries
+    std::map<std::string, int> sourceCounts;
+    std::string maxSource;
+    int maxCount = 0;
+
+    for (const auto& entry : entries) {
+        if (entry.valid) {
+            sourceCounts[entry.source]++;
+        }
+    }
+
+    for (const auto& pair : sourceCounts) {
+        if (pair.second > maxCount) {
+            maxCount = pair.second;
+            maxSource = pair.first;
+        }
+    }
+
+    return maxSource;
+}
