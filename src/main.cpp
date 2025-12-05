@@ -5,6 +5,7 @@
 #include "logParser.h"
 #include "logAnalyzer.h"
 #include "logFilter.h"
+#include "errorHandler.h"
 
 void displayMenu() {
     // Display interactive menu options for user
@@ -36,6 +37,11 @@ void handleUserInput(int option, std::vector<LogEntry>& entries) {
         case 2: {
             std::cout << "Enter minimum level (DEBUG/INFO/WARNING/ERROR): ";
             std::cin >> level;
+            
+            if (!validateLogLevel(level)) {
+                break;
+            }
+            
             filtered = filterByLevel(entries, level);
             std::cout << "Found " << filtered.size() << " entries at or above " << level << std::endl;
             break;
@@ -45,6 +51,11 @@ void handleUserInput(int option, std::vector<LogEntry>& entries) {
             std::cin >> startDate;
             std::cout << "Enter end date (YYYY-MM-DD): ";
             std::cin >> endDate;
+            
+            if (!validateDateRange(startDate, endDate)) {
+                break;
+            }
+            
             filtered = filterByDateRange(entries, startDate, endDate);
             std::cout << "Found " << filtered.size() << " entries in date range" << std::endl;
             break;
@@ -62,7 +73,7 @@ void handleUserInput(int option, std::vector<LogEntry>& entries) {
             break;
         }
         default: {
-            std::cout << "Invalid option" << std::endl;
+            std::cout << "Error: Invalid option. Please select 1-5" << std::endl;
         }
     }
 }
@@ -70,6 +81,7 @@ void handleUserInput(int option, std::vector<LogEntry>& entries) {
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
+        std::cout << "Error: No log file provided" << std::endl;
         std::cout << "Usage: logAnalyzer <log_file>" << std::endl;
         return 1;
     }
@@ -77,19 +89,33 @@ int main(int argc, char* argv[]) {
     std::string logFile = argv[1];
     
     if (!checkFile(logFile)) {
-        std::cout << "Error: File not found or not readable" << std::endl;
+        std::cout << "Error: File '" << logFile << "' not found or not readable" << std::endl;
         return 1;
     }
 
     std::cout << "Log Analyzer initialized for: " << logFile << std::endl;
 
     std::vector<LogEntry> entries = parseLog(logFile);
+    
+    if (entries.empty()) {
+        std::cout << "Error: No valid log entries found in file" << std::endl;
+        return 1;
+    }
+    
     std::cout << "Parsed " << entries.size() << " log entries" << std::endl;
 
     int option = 0;
     while (option != 5) {
         displayMenu();
         std::cin >> option;
+        
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "Error: Invalid input. Please enter a number" << std::endl;
+            continue;
+        }
+        
         handleUserInput(option, entries);
     }
 
